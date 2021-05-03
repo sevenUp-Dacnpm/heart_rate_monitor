@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
@@ -14,6 +15,7 @@ class HeartRateMonitor extends StatelessWidget {
       title: 'Heart Rate Monitor',
       theme: ThemeData(
         primaryColor: Color(0xFF2CC6AE),
+        fontFamily: "Laila",
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             backgroundColor: Colors.white,
             selectedItemColor: Color(0xFF2CC6AE),
