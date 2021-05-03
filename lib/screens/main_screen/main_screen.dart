@@ -4,6 +4,7 @@ import 'package:heart_rate_monitor/screens/main_screen/history_tab/history_tab.d
 import 'package:heart_rate_monitor/screens/main_screen/home_tab/home_tab.dart';
 import 'package:heart_rate_monitor/screens/main_screen/setting_tab/setting_tab.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons.dart';
+import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_tab.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -12,18 +13,28 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 2;
+  String _currentTabTitle = 'Measure';
 
   List<Widget> tabs = [
     SettingTab(),
     HistoryTab(),
     HomeTab(),
+    ReminderTab(),
     SettingTab(),
-    SettingTab(),
+  ];
+
+  List<String> tabTitles = [
+    "Statistic",
+    "History",
+    "Measure",
+    "Reminder",
+    "Setting"
   ];
 
   void onNavigatorTab(index) {
     setState(() {
       _currentIndex = index;
+      _currentTabTitle = tabTitles[index];
     });
   }
 
@@ -31,9 +42,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            "Measure",
-          ),
+          title: Text('$_currentTabTitle'),
           centerTitle: true,
         ),
         bottomNavigationBar: BottomNavigationBar(
