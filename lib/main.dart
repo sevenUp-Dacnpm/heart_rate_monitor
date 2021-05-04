@@ -24,6 +24,8 @@ class HeartRateMonitor extends StatelessWidget {
         appBarTheme: AppBarTheme(backgroundColor: Colors.white),
         textTheme: TextTheme(
           headline3: TextStyle(color: Color(0xFFEE393D), fontSize: 24),
+          headline4: TextStyle(color: Colors.black87, fontSize: 18),
+          bodyText2: TextStyle(color: Colors.black87, fontSize: 15),
         ),
         dividerColor: Color(0xFF2CC6AE),
       ),

@@ -10,7 +10,11 @@ class _ReminderTabState extends State<ReminderTab> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Container(
-        padding: EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 150),
+        padding: EdgeInsets.only(
+          left: screenSize.width * 0.1,
+          right: screenSize.width * 0.1,
+          top: screenSize.height * 0.2,
+        ),
         decoration: BoxDecoration(color: Colors.white),
         child: Center(
           child: Column(
@@ -20,7 +24,7 @@ class _ReminderTabState extends State<ReminderTab> {
                 children: [
                   Text(
                     'Date Time',
-                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   Text('29/03/1999')
                 ],
@@ -33,7 +37,7 @@ class _ReminderTabState extends State<ReminderTab> {
                 children: [
                   Text(
                     'Note',
-                    textAlign: TextAlign.start,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   Text('Hello world')
                 ],
@@ -54,11 +58,13 @@ class _ReminderTabState extends State<ReminderTab> {
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                ))),
+                          borderRadius: BorderRadius.circular(20.0),
+                        ))),
                     onPressed: () {},
                     child: Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5), child: Text('Oke')),
+                        padding: EdgeInsets.only(
+                            left: 20, right: 20, top: 5, bottom: 5),
+                        child: Text('Oke')),
                   )
                 ],
               )

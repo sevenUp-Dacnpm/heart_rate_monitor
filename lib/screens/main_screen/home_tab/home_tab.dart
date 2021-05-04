@@ -12,7 +12,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
-  CameraController _controller;
+  CameraController? _controller;
 
   bool _toggled = false; // toggle button value
   List<SensorValue> _data = []; // array to store the values
@@ -20,12 +20,12 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   int _fs = 30; // sampling frequency (fps)
   int _windowLen = 30 * 6; // window length to display - 6 seconds
   double _alpha = 0.3; // factor for the mean value
-  Timer _timer;
-  AnimationController _animationController;
+  Timer? _timer;
+  late AnimationController _animationController;
   double _iconScale = 1;
-  CameraImage _image; // store the last camera image
-  double _avg; // store the average value during calculation
-  DateTime _now; // store the now Datetime
+  CameraImage? _image; // store the last camera image
+  double _avg = 0; // store the average value during calculation
+  DateTime _now = DateTime.now(); // store the now Datetime
   @override
   void initState() {
     super.initState();
@@ -45,34 +45,13 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     _toggled = false;
     _disposeController();
     Wakelock.disable();
-    _animationController?.stop();
-    _animationController?.dispose();
+    _animationController.stop();
+    _animationController.dispose();
     super.dispose();
   }
 
   void _disposeController() {
     _controller?.dispose();
-    _controller = null;
-  }
-
-  Future<void> loadCameras() async {
-    if (await Permission.camera.isDenied) {
-      if (await Permission.camera.isDenied) {
-        Navigator.pop(context);
-      }
-    }
-    var _cameras = await availableCameras();
-    _controller = CameraController(_cameras[0], ResolutionPreset.max);
-    await _controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
-    // await _controller.setFlashMode(FlashMode.torch);
-    _controller.startImageStream((image) {
-      _image = image;
-    });
   }
 
   void _clearData() {
@@ -90,7 +69,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     _clearData();
     _initController().then((onValue) {
       Wakelock.enable();
-      _animationController?.repeat(reverse: true);
+      _animationController.repeat(reverse: true);
       setState(() {
         _toggled = true;
       });
@@ -103,8 +82,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   void _unToggle() {
     _disposeController();
     Wakelock.disable();
-    _animationController?.stop();
-    _animationController?.value = 0.0;
+    _animationController.stop();
+    _animationController.value = 0.0;
     setState(() {
       _toggled = false;
     });
@@ -114,20 +93,20 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     try {
       List _cameras = await availableCameras();
       _controller = CameraController(_cameras.first, ResolutionPreset.low);
-      await _controller.initialize();
-      await _controller.setFlashMode(FlashMode.torch);
-      _controller.startImageStream((CameraImage image) {
+      await _controller?.initialize();
+      await _controller?.setFlashMode(FlashMode.torch);
+      _controller?.startImageStream((CameraImage image) {
         _image = image;
       });
     } catch (Exception) {
-      debugPrint(Exception);
+      debugPrint(Exception.toString());
     }
   }
 
   void _initTimer() {
     _timer = Timer.periodic(Duration(milliseconds: 1000 ~/ _fs), (timer) {
       if (_toggled) {
-        if (_image != null) _scanImage(_image);
+        if (_image != null) _scanImage(_image!);
       } else {
         timer.cancel();
       }
