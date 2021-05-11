@@ -22,6 +22,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   double _alpha = 0.3; // factor for the mean value
   Timer? _timer;
   late AnimationController _animationController;
+  int _measureDurationMilliseconds = 0; //ms
   double _iconScale = 1;
   CameraImage? _image; // store the last camera image
   double _avg = 0; // store the average value during calculation
@@ -72,6 +73,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       _animationController.repeat(reverse: true);
       setState(() {
         _toggled = true;
+        _bpm = 0;
       });
       // after is toggled
       _initTimer();
@@ -86,6 +88,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     _animationController.value = 0.0;
     setState(() {
       _toggled = false;
+      _measureDurationMilliseconds = 0;
     });
   }
 
@@ -105,6 +108,12 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 
   void _initTimer() {
     _timer = Timer.periodic(Duration(milliseconds: 1000 ~/ _fs), (timer) {
+      setState(() {
+        _measureDurationMilliseconds += 1000 ~/ _fs;
+        if (_measureDurationMilliseconds > 20000) {
+          _unToggle();
+        }
+      });
       if (_toggled) {
         if (_image != null) _scanImage(_image!);
       } else {
@@ -193,32 +202,39 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
           Container(
             margin: EdgeInsets.only(
                 top: screenSize.height * 0.1, bottom: screenSize.height * 0.05),
-            height: screenSize.height * 0.25,
-            width: screenSize.height * 0.25,
-            decoration: BoxDecoration(
-                border: Border.all(width: 10, color: Color(0xFF84E0D4)),
-                borderRadius: BorderRadius.circular(100)),
-            child: Align(
-              alignment: Alignment.center,
-              child: _toggled
-                  ? Transform.scale(
-                      scale: _iconScale,
-                      child: IconButton(
-                        icon: Icon(
-                            _toggled ? Icons.favorite : Icons.favorite_border),
-                        color: Colors.red,
-                        iconSize: 64,
-                        onPressed: _unToggle,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                Container(
+                    height: screenSize.height * 0.25,
+                    width: screenSize.height * 0.25,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Color(0xFF84E0D4),
+                      value: _measureDurationMilliseconds / 20000,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                      strokeWidth: 10,
+                    )),
+                _toggled
+                    ? Transform.scale(
+                        scale: _iconScale,
+                        child: IconButton(
+                          icon: Icon(_toggled
+                              ? Icons.favorite
+                              : Icons.favorite_border),
+                          color: Colors.red,
+                          iconSize: 64,
+                          onPressed: _unToggle,
+                        ),
+                      )
+                    : TextButton(
+                        onPressed: _toggle,
+                        child: Text(
+                          "START",
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
                       ),
-                    )
-                  : TextButton(
-                      onPressed: _toggle,
-                      child: Text(
-                        "START",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                    ),
+              ],
             ),
           ),
           Text(
