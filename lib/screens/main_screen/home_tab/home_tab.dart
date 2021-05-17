@@ -73,7 +73,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       _animationController.repeat(reverse: true);
       setState(() {
         _toggled = true;
-        _bpm = 0;
+        _bpm = 80;
       });
       // after is toggled
       _initTimer();
@@ -123,6 +123,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   }
 
   void _scanImage(CameraImage image) {
+    //Lấy dữ liệu của 1 khung hình
     _now = DateTime.now();
     _avg =
         image.planes.first.bytes.reduce((value, element) => (value + element)) /
@@ -144,6 +145,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     // Since this function doesn't need to be so "exact" regarding the time it executes,
     // I only used the a Future.delay to repeat it from time to time.
     // Ofc you can also use a Timer object to time the callback of this function
+    // đây là thuật toán phân tích của 1 khung hình
     List<SensorValue> _values;
     double _avg;
     int _n;
@@ -181,7 +183,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         _bpm = _bpm / _counter;
         print(_bpm);
         setState(() {
-          this._bpm = ((1 - _alpha) * this._bpm + _alpha * _bpm).toInt();
+          if (_bpm > 30 && _bpm < 200)
+            this._bpm = ((1 - _alpha) * this._bpm + _alpha * _bpm).toInt();
         });
       }
       await Future.delayed(Duration(
