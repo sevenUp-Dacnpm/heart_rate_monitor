@@ -20,7 +20,7 @@ class _ReminderTabState extends State<ReminderTab> {
     return null;
   }
 
-  Future<DateTime> getDate() {
+  Future<DateTime> getDate() async {
     // Imagine that this function is
     // more complex and slow.
     var currentYear = DateTime.now().year;
@@ -31,19 +31,16 @@ class _ReminderTabState extends State<ReminderTab> {
       initialDate: DateTime.now(),
       firstDate: DateTime(currentYear, currentMonth, currentDay),
       lastDate: DateTime(2030),
-      // builder: (BuildContext context, Widget? child) {
-      // return Theme(
-      // data: ThemeData.light(),
-      // child: child
-      // );
-      // },
+
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return SingleChildScrollView(
+
         child: Container(
             padding: EdgeInsets.only(
               left: screenSize.width * 0.05,
@@ -107,6 +104,7 @@ class _ReminderTabState extends State<ReminderTab> {
                                   Text('Hello every one')
                                 ],
                               ),
+
                             ],
                           ),
                         ],
