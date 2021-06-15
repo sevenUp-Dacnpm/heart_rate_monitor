@@ -40,6 +40,7 @@ class _ReminderTabState extends State<ReminderTab> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -60,7 +61,6 @@ class _ReminderTabState extends State<ReminderTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          //crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Date Time',
                                 style: Theme.of(context).textTheme.headline4),
@@ -70,7 +70,6 @@ class _ReminderTabState extends State<ReminderTab> {
                           height: screenSize.height * 0.05,
                         ),
                         Row(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Note',
@@ -81,7 +80,7 @@ class _ReminderTabState extends State<ReminderTab> {
                       ],
                     ),
                     SizedBox(
-                      width: screenSize.width * 0.05,
+                      width: screenSize.width * 0.1,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,13 +100,19 @@ class _ReminderTabState extends State<ReminderTab> {
                           height: screenSize.height * 0.05,
                         ),
                         Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
-                              children: <Widget>[
-                                //Expanded(child: Text('đffầdfá')),
-                                Text('Hello every one')
-                              ],
-                            ),
+                            Text('Hello every one',)
+                            // Row(
+                            //   children: <Widget>[
+                            //     //Expanded(child: Text('đffầdfá')),
+                            //     //Text('Hello every one',)
+                            //     // TextField(
+                            //     //   //maxLines: 8,
+                            //     //   decoration: InputDecoration.collapsed(hintText: "Enter your text here"),
+                            //     // ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ],
@@ -133,7 +138,7 @@ class _ReminderTabState extends State<ReminderTab> {
                             borderRadius: BorderRadius.circular(20.0),
                           ))),
                       child: Padding(
-                          padding: EdgeInsets.only(left: 30, right: 30),
+                          padding: EdgeInsets.only(left: 25, right: 25),
                           child: Text(
                             'Cancel',
                             style: Theme.of(context).textTheme.headline4,
@@ -152,7 +157,7 @@ class _ReminderTabState extends State<ReminderTab> {
                           ))),
                       onPressed: () {},
                       child: Padding(
-                          padding: EdgeInsets.only(left: 30, right: 30),
+                          padding: EdgeInsets.only(left: 25, right: 25),
                           child: Text(
                             'Oke',
                             style: Theme.of(context).textTheme.headline4,
