@@ -24,9 +24,6 @@ class _HistoryTabState extends State<HistoryTab> {
 
   }
 
-  final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
-  final data = <String, String>{};
   List<History> arrData = [
     History(80, DateTime.now(), 'hello'),
     History(80, DateTime.now(), 'hello'),
@@ -74,7 +71,7 @@ class _HistoryTabState extends State<HistoryTab> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
-                      // fontFamily:
+                      fontFamily: "Laila",
                     ),),
                   ],
                 ),

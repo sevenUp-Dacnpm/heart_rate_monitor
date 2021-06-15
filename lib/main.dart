@@ -37,7 +37,7 @@ class HeartRateMonitor extends StatelessWidget {
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))),
       ),
       routes: {
-        "/": (context) => LoginScreen(),
+        "/": (context) => MainScreen(),
         "/login": (context) => LoginScreen(),
         "/register": (context) => RegisterScreen(),
       },
