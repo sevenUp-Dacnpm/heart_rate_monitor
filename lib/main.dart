@@ -1,15 +1,31 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:heart_rate_monitor/models/access_data/access_data.dart';
 import 'package:heart_rate_monitor/screens/authentication/login_screen/login_screen.dart';
 import 'package:heart_rate_monitor/screens/authentication/register_screen/register_screen.dart';
 import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
+import 'package:heart_rate_monitor/services/api_services/authentication_services/authentication_services.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var data = await AuthenticationServices.getAccessData();
+  AccessData().token = data.token;
+  AccessData().user = data.user;
   runApp(HeartRateMonitor());
 }
 
-class HeartRateMonitor extends StatelessWidget {
+class HeartRateMonitor extends StatefulWidget {
+  @override
+  _HeartRateMonitorState createState() => _HeartRateMonitorState();
+}
+
+class _HeartRateMonitorState extends State<HeartRateMonitor> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
@@ -25,6 +41,7 @@ class HeartRateMonitor extends StatelessWidget {
             unselectedItemColor: Colors.black87,
             showUnselectedLabels: true),
         appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+        errorColor: Color(0xFFEE393D),
         textTheme: TextTheme(
           headline3: TextStyle(color: Color(0xFFEE393D), fontSize: 24),
           headline4: TextStyle(color: Colors.black87, fontSize: 18),

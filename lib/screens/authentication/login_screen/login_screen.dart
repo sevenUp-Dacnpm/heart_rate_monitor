@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result != null) {
       AccessData().token = result.token;
       AccessData().user = result.user;
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     } else {
       showDialog(
           context: context,

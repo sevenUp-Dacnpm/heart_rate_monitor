@@ -19,7 +19,17 @@ class AppIcons {
   AppIcons._();
 
   static const _kFontFam = 'AppIcons';
+  static const String _kFontPkg = null;
 
-  static const IconData reminder = IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData heart_beat = IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData calendar = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData clock = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData edit = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData heart = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData history = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData login = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData logout = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData reminder = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData setting = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData statistic = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData sync_icon = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

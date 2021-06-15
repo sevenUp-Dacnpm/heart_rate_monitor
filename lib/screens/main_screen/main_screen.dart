@@ -40,6 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         appBar: AppBar(
           title: Text('$_currentTabTitle'),
           centerTitle: true,
+          elevation: 0,
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: onNavigatorTab,
@@ -47,18 +48,18 @@ class _MainScreenState extends State<MainScreen> {
           currentIndex: _currentIndex,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.insert_chart_rounded),
+              icon: Icon(AppIcons.statistic),
               label: "Statistic",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.history),
+              icon: Icon(AppIcons.history),
               label: "History",
             ),
             BottomNavigationBarItem(
-                icon: Icon(AppIcons.heart_beat),
+                icon: Icon(AppIcons.heart),
                 label: "Measure",
                 activeIcon: Icon(
-                  AppIcons.heart_beat,
+                  AppIcons.heart,
                   color: Color(0xFFF13741),
                 )),
             BottomNavigationBarItem(
@@ -66,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
               label: "Reminder",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+              icon: Icon(AppIcons.setting),
               label: "Setting",
             ),
           ],
