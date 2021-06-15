@@ -12,7 +12,7 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
-  CameraController? _controller;
+  CameraController _controller;
 
   bool _toggled = false; // toggle button value
   List<SensorValue> _data = []; // array to store the values
@@ -20,18 +20,17 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   int _fs = 30; // sampling frequency (fps)
   int _windowLen = 30 * 6; // window length to display - 6 seconds
   double _alpha = 0.3; // factor for the mean value
-  Timer? _timer;
-  late AnimationController _animationController;
+  Timer _timer;
+  AnimationController _animationController;
   int _measureDurationMilliseconds = 0; //ms
   double _iconScale = 1;
-  CameraImage? _image; // store the last camera image
+  CameraImage _image; // store the last camera image
   double _avg = 0; // store the average value during calculation
   DateTime _now = DateTime.now(); // store the now Datetime
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _animationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     _animationController
       ..addListener(() {
         setState(() {
@@ -60,10 +59,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     _data.clear();
     int now = DateTime.now().millisecondsSinceEpoch;
     for (int i = 0; i < _windowLen; i++)
-      _data.insert(
-          0,
-          SensorValue(
-              DateTime.fromMillisecondsSinceEpoch(now - i * 1000 ~/ _fs), 128));
+      _data.insert(0, SensorValue(DateTime.fromMillisecondsSinceEpoch(now - i * 1000 ~/ _fs), 128));
   }
 
   void _toggle() {
@@ -73,7 +69,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       _animationController.repeat(reverse: true);
       setState(() {
         _toggled = true;
-        _bpm = 0;
+        _bpm = 80;
       });
       // after is toggled
       _initTimer();
@@ -115,7 +111,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         }
       });
       if (_toggled) {
-        if (_image != null) _scanImage(_image!);
+        if (_image != null) _scanImage(_image);
       } else {
         timer.cancel();
       }
@@ -123,10 +119,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   }
 
   void _scanImage(CameraImage image) {
+    //Lấy dữ liệu của 1 khung hình
     _now = DateTime.now();
-    _avg =
-        image.planes.first.bytes.reduce((value, element) => (value + element)) /
-            image.planes.first.bytes.length;
+    _avg = image.planes.first.bytes.reduce((value, element) => (value + element)) / image.planes.first.bytes.length;
 
     //print(_avg);
     if (_data.length >= _windowLen) {
@@ -144,6 +139,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     // Since this function doesn't need to be so "exact" regarding the time it executes,
     // I only used the a Future.delay to repeat it from time to time.
     // Ofc you can also use a Timer object to time the callback of this function
+    // đây là thuật toán phân tích của 1 khung hình
     List<SensorValue> _values;
     double _avg;
     int _n;
@@ -166,13 +162,10 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       _counter = 0;
       _previous = 0;
       for (int i = 1; i < _n; i++) {
-        if (_values[i - 1].value < _threshold &&
-            _values[i].value > _threshold) {
+        if (_values[i - 1].value < _threshold && _values[i].value > _threshold) {
           if (_previous != 0) {
             _counter++;
-            _bpm += 60 *
-                1000 /
-                (_values[i].time.millisecondsSinceEpoch - _previous);
+            _bpm += 60 * 1000 / (_values[i].time.millisecondsSinceEpoch - _previous);
           }
           _previous = _values[i].time.millisecondsSinceEpoch;
         }
@@ -181,12 +174,10 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         _bpm = _bpm / _counter;
         print(_bpm);
         setState(() {
-          this._bpm = ((1 - _alpha) * this._bpm + _alpha * _bpm).toInt();
+          if (_bpm > 30 && _bpm < 200) this._bpm = ((1 - _alpha) * this._bpm + _alpha * _bpm).toInt();
         });
       }
-      await Future.delayed(Duration(
-          milliseconds:
-              1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
+      await Future.delayed(Duration(milliseconds: 1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
   }
 
@@ -200,8 +191,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(
-                top: screenSize.height * 0.1, bottom: screenSize.height * 0.05),
+            margin: EdgeInsets.only(top: screenSize.height * 0.1, bottom: screenSize.height * 0.05),
             child: Stack(
               alignment: AlignmentDirectional.center,
               children: [
@@ -218,9 +208,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     ? Transform.scale(
                         scale: _iconScale,
                         child: IconButton(
-                          icon: Icon(_toggled
-                              ? Icons.favorite
-                              : Icons.favorite_border),
+                          icon: Icon(_toggled ? Icons.favorite : Icons.favorite_border),
                           color: Colors.red,
                           iconSize: 64,
                           onPressed: _unToggle,

@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:heart_rate_monitor/screens/authentication/login_screen/login_screen.dart';
+import 'package:heart_rate_monitor/screens/authentication/register_screen/register_screen.dart';
 import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
 
 void main() {
@@ -16,6 +18,7 @@ class HeartRateMonitor extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xFF2CC6AE),
         fontFamily: "Laila",
+        scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             backgroundColor: Colors.white,
             selectedItemColor: Color(0xFF2CC6AE),
@@ -28,8 +31,16 @@ class HeartRateMonitor extends StatelessWidget {
           bodyText2: TextStyle(color: Colors.black87, fontSize: 15),
         ),
         dividerColor: Color(0xFF2CC6AE),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Color(0xFF2CC6AE)),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))),
       ),
-      routes: {"/": (context) => MainScreen()},
+      routes: {
+        "/": (context) => LoginScreen(),
+        "/login": (context) => LoginScreen(),
+        "/register": (context) => RegisterScreen(),
+      },
     );
   }
 }
