@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 
 class ReminderList extends StatefulWidget {
   @override
@@ -52,24 +55,20 @@ class _ReminderListState extends State<ReminderList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(arrData[index].time.toString(),
-                        style: TextStyle(fontSize: 10)),
-                    FloatingActionButton(
-                        onPressed: null,
-                        child: const Icon(Icons.edit),
-                    ),
+                    Text(DateFormat('yMd').add_jm().format(arrData[index].time).toString(),
+                        style: TextStyle(fontSize: 20)),
+                   IconButton(
+                       icon: const Icon(AppIcons.edit,
+                       color: Colors.black),
+                       onPressed: null)
                   ],
                 ),
-                // SizedBox(
-                //   height: screenSize.height * 0.015,
-                // ),
                 Row(
                   children: [
                     Text(arrData[index].note,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 20,
-                        // fontFamily:
                       ),),
                   ],
                 ),
@@ -86,7 +85,7 @@ class _ReminderListState extends State<ReminderList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: _buildWidgetList()
+        child: _buildWidgetList(),
     );
   }
 }
