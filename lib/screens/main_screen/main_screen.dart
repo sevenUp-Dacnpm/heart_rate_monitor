@@ -3,7 +3,7 @@ import 'package:heart_rate_monitor/screens/main_screen/history_tab/history_tab.d
 
 import 'package:heart_rate_monitor/screens/main_screen/home_tab/home_tab.dart';
 import 'package:heart_rate_monitor/screens/main_screen/setting_tab/setting_tab.dart';
-import 'package:heart_rate_monitor/widgets/icons/app_icons.dart';
+import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_tab.dart';
 
 class MainScreen extends StatefulWidget {
@@ -23,13 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     SettingTab(),
   ];
 
-  List<String> tabTitles = [
-    "Statistic",
-    "History",
-    "Measure",
-    "Reminder",
-    "Setting"
-  ];
+  List<String> tabTitles = ["Statistic", "History", "Measure", "Reminder", "Setting"];
 
   void onNavigatorTab(index) {
     setState(() {

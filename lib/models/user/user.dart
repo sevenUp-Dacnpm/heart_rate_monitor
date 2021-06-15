@@ -54,7 +54,7 @@ class Profile {
       );
 
   Map<String, dynamic> toJson() => {
-        "dob": dob.toIso8601String(),
+        "dob": dob?.toIso8601String(),
         "fullName": fullName,
         "gender": gender,
         "weight": weight,
