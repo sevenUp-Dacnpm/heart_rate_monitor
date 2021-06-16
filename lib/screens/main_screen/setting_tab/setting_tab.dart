@@ -35,7 +35,7 @@ class _SettingTabState extends State<SettingTab> {
           if (_isLoggedIn)
             ListTile(
               onTap: () {
-                showDialog(context: context, builder: (context) => ConfirmDialog("Logout", "Do you want to logout?"))
+                showDialog(context: context, builder: (context) => ConfirmDialog("Do you want to logout?"))
                     .then((value) {
                   if (value == true) {
                     AccessData().token = null;
