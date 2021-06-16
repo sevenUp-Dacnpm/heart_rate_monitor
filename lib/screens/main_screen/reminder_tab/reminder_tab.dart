@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +11,8 @@ class ReminderTab extends StatefulWidget {
 
 class _ReminderTabState extends State<ReminderTab> {
   var finaldate = DateFormat('yMd').add_jm().format(DateTime.now());
+  var reminderNote = 'Hello world';
+
   void callDatePicker() async {
     var order = await getDate();
     setState(() {
@@ -35,6 +36,44 @@ class _ReminderTabState extends State<ReminderTab> {
     );
   }
 
+  TextEditingController _textFieldController = TextEditingController();
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Reminder Note'),
+          content: TextField(
+            controller: _textFieldController,
+            decoration: InputDecoration(hintText: "Text Field in Dialog"),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                print(_textFieldController.text);
+                setState(() {
+                  reminderNote = _textFieldController.text;
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void handleEditNote(){
+    _displayTextInputDialog(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,15 +135,16 @@ class _ReminderTabState extends State<ReminderTab> {
                           SizedBox(
                             height: screenSize.height * 0.05,
                           ),
-                          Column(
-                            children: [
-                              Row(
-                                children: <Widget>[
-                                  //Expanded(child: Text('đffầdfá')),
-                                  Text('Hello every one')
-                                ],
+                          Row(
+                            children: <Widget>[
+                              Text('$reminderNote',
+                                textAlign: TextAlign.left,
+                                overflow: TextOverflow.ellipsis,
                               ),
-
+                              IconButton(
+                                  icon: const Icon(AppIcons.edit,
+                                      color: Colors.black),
+                                  onPressed: handleEditNote)
                             ],
                           ),
                         ],
@@ -146,9 +186,9 @@ class _ReminderTabState extends State<ReminderTab> {
                               'Oke',
                               style: Theme.of(context).textTheme.headline4,
                             )),
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             )));

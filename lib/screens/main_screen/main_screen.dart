@@ -21,8 +21,8 @@ class _MainScreenState extends State<MainScreen> {
     SettingTab(),
     HistoryTab(),
     HomeTab(),
-    // ReminderTab(),
-    ReminderList(),
+    ReminderTab(),
+    // ReminderList(),
     SettingTab(),
   ];
 

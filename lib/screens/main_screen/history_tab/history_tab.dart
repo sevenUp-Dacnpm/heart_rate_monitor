@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 
 class HistoryTab extends StatefulWidget {
   @override
@@ -59,7 +61,7 @@ class _HistoryTabState extends State<HistoryTab> {
                   children: [
                       Text(arrData[index].heartRate.toString(),
                       style: Theme.of(context).textTheme.headline3),
-                      Text(arrData[index].time.toString()),
+                      Text(DateFormat('yMd').add_jm().format(arrData[index].time).toString()),
                   ],
                 ),
                 SizedBox(
