@@ -45,6 +45,18 @@ class AuthenticationServices {
     }
   }
 
+  static Future<bool> verifyToken(String token) async {
+    Uri url = Uri.https(APIServices.apiUrl, "/verify_token");
+    var response = await post(
+      url,
+      headers: {
+        HttpHeaders.authorizationHeader: token,
+      },
+    );
+    print(response.body);
+    return response.statusCode == 200;
+  }
+
   static Future<void> saveAccessData(AccessData data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", data.token);

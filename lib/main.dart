@@ -34,6 +34,13 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
       theme: ThemeData(
         primaryColor: Color(0xFF2CC6AE),
         fontFamily: "Laila",
+        radioTheme: RadioThemeData(
+          fillColor: MaterialStateProperty.all(Color(0xFF2CC6AE)),
+        ),
+        colorScheme: ThemeData().colorScheme.copyWith(
+              primary: Color(0xFF2CC6AE),
+            ),
+        accentColor: Color(0xFF2CC6AE),
         scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             backgroundColor: Colors.white,
@@ -46,6 +53,11 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
           headline3: TextStyle(color: Color(0xFFEE393D), fontSize: 24),
           headline4: TextStyle(color: Colors.black87, fontSize: 18),
           bodyText2: TextStyle(color: Colors.black87, fontSize: 15),
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: Color(0xFF2CC6AE),
+          selectionHandleColor: Color(0xFF2CC6AE),
+          cursorColor: Color(0xFF2CC6AE),
         ),
         dividerColor: Color(0xFF2CC6AE),
         elevatedButtonTheme: ElevatedButtonThemeData(

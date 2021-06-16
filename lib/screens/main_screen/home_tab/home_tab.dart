@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:heart_rate_monitor/screens/main_screen/home_tab/chart.dart';
+import 'package:heart_rate_monitor/models/access_data/access_data.dart';
+import 'package:heart_rate_monitor/models/heart_rate_model/body_state.dart';
+import 'package:heart_rate_monitor/screens/main_screen/home_tab/local_widgets/chart/chart.dart';
+import 'package:heart_rate_monitor/screens/main_screen/home_tab/local_widgets/save_dialog/save_dialog.dart';
+import 'package:heart_rate_monitor/services/api_services/heart_rate_services/heart_rate_services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -19,8 +23,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   int _bpm = 0; // beats per minute
   int _fs = 30; // sampling frequency (fps)
   int _windowLen = 30 * 6; // window length to display - 6 seconds
-  double _alpha = 0.3; // factor for the mean value
+  double _alpha = 1; // factor for the mean value
   Timer _timer;
+  double duration = 20000;
   AnimationController _animationController;
   int _measureDurationMilliseconds = 0; //ms
   double _iconScale = 1;
@@ -66,10 +71,11 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     _clearData();
     _initController().then((onValue) {
       Wakelock.enable();
+      _alpha = 1.0;
       _animationController.repeat(reverse: true);
       setState(() {
         _toggled = true;
-        _bpm = 80;
+        _bpm = 0;
       });
       // after is toggled
       _initTimer();
@@ -82,6 +88,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     Wakelock.disable();
     _animationController.stop();
     _animationController.value = 0.0;
+
     setState(() {
       _toggled = false;
       _measureDurationMilliseconds = 0;
@@ -106,8 +113,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     _timer = Timer.periodic(Duration(milliseconds: 1000 ~/ _fs), (timer) {
       setState(() {
         _measureDurationMilliseconds += 1000 ~/ _fs;
-        if (_measureDurationMilliseconds > 20000) {
+        if (_measureDurationMilliseconds > duration) {
           _unToggle();
+          showDialog(context: context, builder: (context) => SaveDialog(bpm: _bpm));
         }
       });
       if (_toggled) {
@@ -176,6 +184,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         setState(() {
           if (_bpm > 30 && _bpm < 200) this._bpm = ((1 - _alpha) * this._bpm + _alpha * _bpm).toInt();
         });
+        _alpha = 0.3;
       }
       await Future.delayed(Duration(milliseconds: 1000 * _windowLen ~/ _fs)); // wait for a new set of _data values
     }
@@ -184,76 +193,76 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    return Container(
-      padding: EdgeInsets.all(10),
-      width: double.infinity,
-      height: double.infinity,
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: screenSize.height * 0.1, bottom: screenSize.height * 0.05),
-            child: Stack(
-              alignment: AlignmentDirectional.center,
-              children: [
-                Container(
-                    height: screenSize.height * 0.25,
-                    width: screenSize.height * 0.25,
-                    child: CircularProgressIndicator(
-                      backgroundColor: Color(0xFF84E0D4),
-                      value: _measureDurationMilliseconds / 20000,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                      strokeWidth: 10,
-                    )),
-                _toggled
-                    ? Transform.scale(
-                        scale: _iconScale,
-                        child: IconButton(
-                          icon: Icon(_toggled ? Icons.favorite : Icons.favorite_border),
-                          color: Colors.red,
-                          iconSize: 64,
-                          onPressed: _unToggle,
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(top: screenSize.height * 0.1, bottom: screenSize.height * 0.05),
+              child: Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Container(
+                      height: screenSize.height * 0.25,
+                      width: screenSize.height * 0.25,
+                      child: CircularProgressIndicator(
+                        backgroundColor: Color(0xFF84E0D4),
+                        value: _measureDurationMilliseconds / duration,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                        strokeWidth: 10,
+                      )),
+                  _toggled
+                      ? Transform.scale(
+                          scale: _iconScale,
+                          child: IconButton(
+                            icon: Icon(_toggled ? Icons.favorite : Icons.favorite_border),
+                            color: Colors.red,
+                            iconSize: 64,
+                            onPressed: _unToggle,
+                          ),
+                        )
+                      : TextButton(
+                          onPressed: _toggle,
+                          child: Text(
+                            "START",
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
                         ),
-                      )
-                    : TextButton(
-                        onPressed: _toggle,
-                        child: Text(
-                          "START",
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                      ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Text(
-            "$_bpm BPM",
-            style: Theme.of(context).textTheme.headline3,
-          ),
-          Divider(
-            indent: screenSize.width * 0.2,
-            endIndent: screenSize.width * 0.2,
-            thickness: 3,
-          ),
-          SizedBox(
-            height: screenSize.height * (_toggled ? 0.05 : 0.15),
-          ),
-          _toggled
-              ? Container(
-                  height: screenSize.height * 0.25,
-                  margin: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(18),
-                      ),
-                      color: Colors.black),
-                  child: Chart(_data),
-                )
-              : Text(
-                  "Please your finger on back camera and flash to start measure",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-        ],
+            Text(
+              "$_bpm BPM",
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            Divider(
+              indent: screenSize.width * 0.2,
+              endIndent: screenSize.width * 0.2,
+              thickness: 3,
+            ),
+            SizedBox(
+              height: screenSize.height * (_toggled ? 0.05 : 0.15),
+            ),
+            _toggled
+                ? Container(
+                    height: screenSize.height * 0.25,
+                    margin: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(18),
+                        ),
+                        color: Colors.black),
+                    child: Chart(_data),
+                  )
+                : Text(
+                    "Please your finger on back camera and flash to start measure",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+          ],
+        ),
       ),
     );
   }
