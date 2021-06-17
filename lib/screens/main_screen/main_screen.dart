@@ -4,7 +4,6 @@ import 'package:heart_rate_monitor/screens/main_screen/history_tab/history_tab.d
 import 'package:heart_rate_monitor/screens/main_screen/home_tab/home_tab.dart';
 import 'package:heart_rate_monitor/screens/main_screen/setting_tab/setting_tab.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
-import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_tab.dart';
 import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_list.dart';
 import 'package:flutter/material.dart';
 
@@ -16,13 +15,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 2;
   String _currentTabTitle = 'Measure';
-
   List<Widget> tabs = [
     SettingTab(),
     HistoryTab(),
     HomeTab(),
-    ReminderTab(),
-    // ReminderList(),
+    ReminderList(),
     SettingTab(),
   ];
 
@@ -38,11 +35,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('$_currentTabTitle'),
-          centerTitle: true,
-          elevation: 0,
-        ),
+        // appBar: AppBar(
+        //   title: Text('$_currentTabTitle'),
+        //   centerTitle: true,
+        //   elevation: 0,
+        // ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: onNavigatorTab,
           showUnselectedLabels: true,
@@ -74,23 +71,6 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
         body: tabs[_currentIndex],
-
-        floatingActionButton: _currentIndex==3? FloatingActionButton.extended(
-          icon: Icon(
-              Icons.add,
-              color: Color(0xFF5CC6BC),
-          ),
-          label: const Text(
-              'Create',
-              style: TextStyle(
-                color: Color(0xFF5CC6BC),
-              ),
-          ),
-          backgroundColor: Colors.white,
-          onPressed: () {
-            print("pressed it");
-          },
-        ):Text(''),
     );
   }
 }

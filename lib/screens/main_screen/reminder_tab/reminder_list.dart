@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_tab.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,8 +85,32 @@ class _ReminderListState extends State<ReminderList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Reminder List'),
+      ),
+      body:  Container(
         child: _buildWidgetList(),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: Icon(
+          Icons.add,
+          color: Color(0xFF5CC6BC),
+        ),
+        label: const Text(
+          'Create',
+          style: TextStyle(
+            color: Color(0xFF5CC6BC),
+          ),
+        ),
+        backgroundColor: Colors.white,
+        onPressed: ()=>{
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ReminderTab()),
+          )
+        },
+      ),
     );
   }
 }
