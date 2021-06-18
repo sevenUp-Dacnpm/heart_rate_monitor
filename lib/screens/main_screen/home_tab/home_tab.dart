@@ -25,7 +25,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   int _windowLen = 30 * 6; // window length to display - 6 seconds
   double _alpha = 1; // factor for the mean value
   Timer _timer;
-  double duration = 20000;
+  double duration = 1000;
   AnimationController _animationController;
   int _measureDurationMilliseconds = 0; //ms
   double _iconScale = 1;

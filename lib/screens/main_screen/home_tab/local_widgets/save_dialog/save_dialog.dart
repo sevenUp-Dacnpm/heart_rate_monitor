@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:heart_rate_monitor/models/access_data/access_data.dart';
 import 'package:heart_rate_monitor/models/heart_rate_model/body_state.dart';
+import 'package:heart_rate_monitor/models/heart_rate_model/heart_rate.dart';
 import 'package:heart_rate_monitor/services/api_services/heart_rate_services/heart_rate_services.dart';
+import 'package:heart_rate_monitor/services/sqlite_services/sqlite_services.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 
 class SaveDialog extends StatefulWidget {
@@ -17,6 +19,7 @@ class _SaveDialogState extends State<SaveDialog> {
   BodyState _bodyState = BodyState.routine;
   bool _isSaving = false;
   bool _isFailed = false;
+  var _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -37,6 +40,7 @@ class _SaveDialogState extends State<SaveDialog> {
             ),
             SizedBox(height: 20),
             TextField(
+              controller: _textController,
               decoration: InputDecoration(
                 prefixIcon: Icon(
                   AppIcons.edit,
@@ -123,8 +127,9 @@ class _SaveDialogState extends State<SaveDialog> {
                   _isSaving = true;
                   _isFailed = false;
                 });
+                var heartRate = HeartRate(heartRate: widget.bpm, bodyState: _bodyState, note: _textController.text);
                 if (AccessData().token != null) {
-                  var result = await HeartRateServices.saveHeartRate(widget.bpm, _bodyState);
+                  var result = await HeartRateServices.saveHeartRate(heartRate);
                   if (result) {
                     Navigator.of(context).pop({"result": true, "bodyState": _bodyState});
                   } else {
@@ -132,7 +137,10 @@ class _SaveDialogState extends State<SaveDialog> {
                       _isFailed = true;
                     });
                   }
-                } else {}
+                } else {
+                  await SqliteServices.saveHeartRate(heartRate);
+                  Navigator.of(context).pop({"result": true, "bodyState": _bodyState});
+                }
                 setState(() {
                   _isSaving = false;
                 });

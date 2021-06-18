@@ -4,11 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:heart_rate_monitor/models/access_data/access_data.dart';
 import 'package:heart_rate_monitor/screens/authentication/login_screen/login_screen.dart';
 import 'package:heart_rate_monitor/screens/authentication/register_screen/register_screen.dart';
+import 'package:heart_rate_monitor/screens/keys/keys.dart';
 import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
 import 'package:heart_rate_monitor/services/api_services/authentication_services/authentication_services.dart';
+import 'package:heart_rate_monitor/services/sqlite_services/sqlite_services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SqliteServices.initSqlite();
   var data = await AuthenticationServices.getAccessData();
   AccessData().token = data.token;
   AccessData().user = data.user;
@@ -31,6 +34,7 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     return MaterialApp(
       title: 'Heart Rate Monitor',
+      navigatorKey: Keys.navigationKeys,
       theme: ThemeData(
         primaryColor: Color(0xFF2CC6AE),
         fontFamily: "Laila",
