@@ -7,6 +7,8 @@ import 'package:heart_rate_monitor/screens/authentication/register_screen/regist
 import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
 import 'package:heart_rate_monitor/services/api_services/authentication_services/authentication_services.dart';
 
+import 'screens/main_screen/reminder_tab/reminder_tab.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var data = await AuthenticationServices.getAccessData();
@@ -69,6 +71,7 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
         "/": (context) => MainScreen(),
         "/login": (context) => LoginScreen(),
         "/register": (context) => RegisterScreen(),
+        "/reminder_detail": (context) => ReminderTab()
       },
     );
   }
