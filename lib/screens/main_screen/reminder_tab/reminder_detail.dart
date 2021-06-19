@@ -8,12 +8,12 @@ import 'package:flutter/cupertino.dart';
 
 import 'reminder_list.dart';
 
-class ReminderTab extends StatefulWidget {
+class ReminderDetail extends StatefulWidget {
   @override
-  _ReminderTabState createState() => _ReminderTabState();
+  _ReminderDetail createState() => _ReminderDetail();
 }
 
-class _ReminderTabState extends State<ReminderTab> {
+class _ReminderDetail extends State<ReminderDetail> {
   Reminder _reminder;
 
   void callDatePicker() async {
@@ -64,6 +64,11 @@ class _ReminderTabState extends State<ReminderTab> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     _reminder = ModalRoute.of(context).settings.arguments;
+    if (_reminder == null) {
+      setState(() {
+        _reminder = new Reminder(DateTime.now(), 'linhdong');
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Reminder'),
@@ -130,12 +135,6 @@ class _ReminderTabState extends State<ReminderTab> {
                   onPressed: handleEditNote,
                   padding: EdgeInsets.zero,
                 ),
-                // ListTile(
-                //   contentPadding: EdgeInsets.zero,
-                //   minVerticalPadding: 0,
-                //   title: Text(
-                //       '${DateFormat('yMd').add_jm().format(_reminder.time)}'),
-                // )
               ],
             ),
             SizedBox(
@@ -162,7 +161,7 @@ class _ReminderTabState extends State<ReminderTab> {
                         Navigator.pop(context, _reminder);
                       },
                       child: Text(
-                        'Oke',
+                        _reminder.note != '' ? 'Oke' : 'Save',
                         style: Theme.of(context).textTheme.headline4,
                       )),
                 ],
@@ -170,106 +169,6 @@ class _ReminderTabState extends State<ReminderTab> {
             ),
           ],
         ),
-        // child: Column(
-        //   children: [
-        //     Row(
-        //       children: [
-        //         Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Row(
-        //               //crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text('Date Time',
-        //                     style: Theme.of(context).textTheme.headline4),
-        //               ],
-        //             ),
-        //             SizedBox(
-        //               height: screenSize.height * 0.05,
-        //             ),
-        //             Row(
-        //               // crossAxisAlignment: CrossAxisAlignment.start,
-        //               children: [
-        //                 Text(
-        //                   'Note',
-        //                   style: Theme.of(context).textTheme.headline4,
-        //                 )
-        //               ],
-        //             ),
-        //           ],
-        //         ),
-        //         SizedBox(
-        //           width: screenSize.width * 0.05,
-        //         ),
-        //         Column(
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Row(
-        //               children: [
-        //                 Text(
-        //                     '${DateFormat('yMd').add_jm().format(_reminder.time)}'),
-        //                 IconButton(
-        //                     icon: Icon(
-        //                       Icons.calendar_today_outlined,
-        //                       color: Color(0xFF84E0D4),
-        //                     ),
-        //                     onPressed: callDatePicker)
-        //               ],
-        //             ),
-        //             SizedBox(
-        //               height: screenSize.height * 0.05,
-        //             ),
-        //             Row(
-        //               children: <Widget>[
-        //                 SizedBox(
-        //                   width: 200,
-        //                   child: Text(
-        //                     _reminder.note,
-        //                     overflow: TextOverflow.visible,
-        //                   ),
-        //                 ),
-        //                 IconButton(
-        //                     icon:
-        //                         const Icon(AppIcons.edit, color: Colors.black),
-        //                     onPressed: handleEditNote),
-        //               ],
-        //             ),
-        //           ],
-        //         ),
-        //       ],
-        //     ),
-        //     SizedBox(
-        //       height: screenSize.height * 0.4,
-        //     ),
-        //     Align(
-        //       alignment: Alignment.bottomCenter,
-        //       child: Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //         children: [
-        //           ElevatedButton(
-        //               onPressed: () {
-        //                 Navigator.pop(context);
-        //               },
-        //               style: ButtonStyle(
-        //                   backgroundColor:
-        //                       MaterialStateProperty.all(Color(0xFFEEEEEE))),
-        //               child: Text(
-        //                 'Cancel',
-        //                 style: Theme.of(context).textTheme.headline4,
-        //               )),
-        //           ElevatedButton(
-        //               onPressed: () {
-        //                 Navigator.pop(context, _reminder);
-        //               },
-        //               child: Text(
-        //                 'Oke',
-        //                 style: Theme.of(context).textTheme.headline4,
-        //               )),
-        //         ],
-        //       ),
-        //     ),
-        //   ],
-        // ),
       )),
     );
   }

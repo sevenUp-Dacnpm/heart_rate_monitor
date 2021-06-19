@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_tab.dart';
+import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_detail.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,17 +26,6 @@ class _ReminderListState extends State<ReminderList> {
   void loadData() {}
 
   List<Reminder> arrData = [
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
     Reminder(DateTime.now(), "Mark heart rate!"),
     Reminder(DateTime.now(), "Mark heart rate!"),
     Reminder(DateTime.now(), "Mark heart rate!"),
@@ -73,6 +62,13 @@ class _ReminderListState extends State<ReminderList> {
                                 arrData[index] = value;
                               });
                             }
+                          });
+                        }),
+                    IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: () {
+                          setState(() {
+                            arrData.removeAt(index);
                           });
                         }),
                   ],
@@ -117,10 +113,13 @@ class _ReminderListState extends State<ReminderList> {
         ),
         backgroundColor: Colors.white,
         onPressed: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ReminderTab()),
-          )
+          Navigator.pushNamed(context, "/reminder_detail").then((value) {
+            if (value != null) {
+              setState(() {
+                arrData.add(value);
+              });
+            }
+          })
         },
       ),
     );

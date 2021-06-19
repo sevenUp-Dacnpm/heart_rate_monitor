@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class EditDialog extends StatefulWidget {
@@ -14,6 +16,7 @@ class _EditDialogState extends State<EditDialog> {
   void initState() {
     super.initState();
     _textFieldController.text = widget.note;
+    print({widget.note});
   }
 
   @override

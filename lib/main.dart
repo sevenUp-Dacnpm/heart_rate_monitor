@@ -9,7 +9,7 @@ import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
 import 'package:heart_rate_monitor/services/api_services/authentication_services/authentication_services.dart';
 import 'package:heart_rate_monitor/services/sqlite_services/sqlite_services.dart';
 
-import 'screens/main_screen/reminder_tab/reminder_tab.dart';
+import 'screens/main_screen/reminder_tab/reminder_detail.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,13 +69,14 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Color(0xFF2CC6AE)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20))))),
       ),
       routes: {
         "/": (context) => MainScreen(),
         "/login": (context) => LoginScreen(),
         "/register": (context) => RegisterScreen(),
-        "/reminder_detail": (context) => ReminderTab()
+        "/reminder_detail": (context) => ReminderDetail()
       },
     );
   }
