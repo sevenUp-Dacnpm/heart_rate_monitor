@@ -10,10 +10,11 @@ class ReminderList extends StatefulWidget {
 }
 
 class Reminder {
-  DateTime time;
+  DateTime date;
+  TimeOfDay time;
   String note;
 
-  Reminder(this.time, this.note);
+  Reminder(this.date, this.time, this.note);
 }
 
 class _ReminderListState extends State<ReminderList> {
@@ -26,10 +27,10 @@ class _ReminderListState extends State<ReminderList> {
   void loadData() {}
 
   List<Reminder> arrData = [
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), "Mark heart rate!"),
+    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
+    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
+    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
+    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
   ];
 
   ListView _buildWidgetList() {
@@ -46,10 +47,7 @@ class _ReminderListState extends State<ReminderList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                        DateFormat('yMd')
-                            .add_jm()
-                            .format(arrData[index].time)
-                            .toString(),
+                        '${DateFormat('yMd').format(arrData[index].date).toString()} ${arrData[index].time.format(context)}',
                         style: TextStyle(fontSize: 20)),
                     IconButton(
                         icon: const Icon(AppIcons.edit, color: Colors.black),

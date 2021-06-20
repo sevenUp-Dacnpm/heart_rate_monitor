@@ -15,12 +15,14 @@ class ReminderDetail extends StatefulWidget {
 
 class _ReminderDetail extends State<ReminderDetail> {
   Reminder _reminder;
+  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay picked;
 
   void callDatePicker() async {
     var result = await getDate();
     if (result != null)
       setState(() {
-        _reminder.time = result;
+        _reminder.date = result;
       });
     return null;
   }
@@ -37,6 +39,17 @@ class _ReminderDetail extends State<ReminderDetail> {
       firstDate: DateTime(currentYear, currentMonth, currentDay),
       lastDate: DateTime(2030),
     );
+  }
+
+  Future<TimeOfDay> selectedTime(BuildContext context) async {
+    picked = await showTimePicker(
+      context: context,
+      initialTime: _time,
+    );
+
+    setState(() {
+      _reminder.time = picked;
+    });
   }
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
@@ -66,7 +79,7 @@ class _ReminderDetail extends State<ReminderDetail> {
     _reminder = ModalRoute.of(context).settings.arguments;
     if (_reminder == null) {
       setState(() {
-        _reminder = new Reminder(DateTime.now(), 'linhdong');
+        _reminder = new Reminder(DateTime.now(), TimeOfDay.now(), '');
       });
     }
     return Scaffold(
@@ -94,7 +107,7 @@ class _ReminderDetail extends State<ReminderDetail> {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    '${DateFormat('yMd').add_jm().format(_reminder.time)}',
+                    '${DateFormat('yMd').format(_reminder.date)}  ${_reminder.time.format(context)}',
                   ),
                 ),
                 IconButton(
@@ -104,7 +117,17 @@ class _ReminderDetail extends State<ReminderDetail> {
                   ),
                   onPressed: callDatePicker,
                   padding: EdgeInsets.zero,
-                )
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.alarm,
+                    color: Color(0xFF84E0D4),
+                  ),
+                  onPressed: () {
+                    selectedTime(context);
+                  },
+                  padding: EdgeInsets.zero,
+                ),
               ],
             ),
             SizedBox(
