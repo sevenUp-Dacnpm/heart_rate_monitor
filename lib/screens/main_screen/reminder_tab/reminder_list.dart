@@ -47,7 +47,8 @@ class _ReminderListState extends State<ReminderList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                        '${DateFormat('yMd').format(arrData[index].date).toString()} ${arrData[index].time.format(context)}',
+                        '${DateFormat('yMd').format(arrData[index].date).toString()}-'
+                        '${arrData[index].time.format(context)}',
                         style: TextStyle(fontSize: 20)),
                     IconButton(
                         icon: const Icon(AppIcons.edit, color: Colors.black),
@@ -111,7 +112,11 @@ class _ReminderListState extends State<ReminderList> {
         ),
         backgroundColor: Colors.white,
         onPressed: () => {
-          Navigator.pushNamed(context, "/reminder_detail").then((value) {
+          Navigator.pushNamed(
+            context,
+            "/reminder_detail",
+            arguments: Reminder(DateTime.now(), TimeOfDay.now(), ''),
+          ).then((value) {
             if (value != null) {
               setState(() {
                 arrData.add(value);

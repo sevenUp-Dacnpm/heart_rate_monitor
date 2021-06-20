@@ -77,11 +77,11 @@ class _ReminderDetail extends State<ReminderDetail> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     _reminder = ModalRoute.of(context).settings.arguments;
-    if (_reminder == null) {
-      setState(() {
-        _reminder = new Reminder(DateTime.now(), TimeOfDay.now(), '');
-      });
-    }
+    // if (_reminder == null) {
+    //   setState(() {
+    //     _reminder = new Reminder(DateTime.now(), TimeOfDay.now(), '');
+    //   });
+    // }
     return Scaffold(
       appBar: AppBar(
         title: Text('Reminder'),
@@ -107,7 +107,7 @@ class _ReminderDetail extends State<ReminderDetail> {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    '${DateFormat('yMd').format(_reminder.date)}  ${_reminder.time.format(context)}',
+                    '${DateFormat('yMd').format(_reminder.date)} - ${_reminder.time.format(context)}',
                   ),
                 ),
                 IconButton(
