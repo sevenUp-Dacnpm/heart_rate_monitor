@@ -42,7 +42,14 @@ class SqliteServices {
   static Future<void> updateReminder(Reminder reminder, int index) async {
     await database.transaction((txn) async {
       int count = await txn.update("Reminder", reminder.toJson(),
-          where: 'id = ?', whereArgs: [reminder.id]);
+          where: 'id = ?', whereArgs: [index]);
+      return;
+    });
+  }
+
+  static Future<void> deleteReminder(int index) async {
+    await database.transaction((txn) async {
+      await txn.delete("Reminder", where: 'id = ?', whereArgs: [index]);
       return;
     });
   }

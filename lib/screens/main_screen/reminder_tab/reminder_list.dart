@@ -41,6 +41,10 @@ class _ReminderListState extends State<ReminderList> {
     await SqliteServices.updateReminder(reminder, index);
   }
 
+  Future<void> deleteReminder(int index) async {
+    await SqliteServices.deleteReminder(index);
+  }
+
   List<Reminder> arrData = [
     Reminder(
         date: DateTime.now(), time: TimeOfDay.now(), note: "Mark heart rate!"),
@@ -100,6 +104,7 @@ class _ReminderListState extends State<ReminderList> {
                             IconButton(
                               icon: const Icon(Icons.delete_outline),
                               onPressed: () {
+                                deleteReminder(_reminderList[index].id);
                                 setState(() {
                                   _reminderList.removeAt(index);
                                 });
