@@ -60,8 +60,12 @@ class _HistoryTabState extends State<HistoryTab> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(_history[index].heartRate.toString(), style: Theme.of(context).textTheme.headline3),
-                        Text(DateFormat('yMd').add_jm().format(_history[index].date).toString()),
+                        Text(_history[index].heartRate.toString(),
+                            style: Theme.of(context).textTheme.headline3),
+                        Text(DateFormat('yMd')
+                            .add_jm()
+                            .format(_history[index].date)
+                            .toString()),
                       ],
                     ),
                     SizedBox(

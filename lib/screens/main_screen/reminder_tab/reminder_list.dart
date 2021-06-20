@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_detail.dart';
+import 'package:heart_rate_monitor/models/reminder/reminder.dart';
+import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_service/reminder_service.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
+import 'package:heart_rate_monitor/services/sqlite_services/sqlite_services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,76 +11,112 @@ class ReminderList extends StatefulWidget {
   _ReminderListState createState() => _ReminderListState();
 }
 
-class Reminder {
-  DateTime date;
-  TimeOfDay time;
-  String note;
-
-  Reminder(this.date, this.time, this.note);
-}
-
 class _ReminderListState extends State<ReminderList> {
+  bool _isLoading = true;
+  List<Reminder> _reminderList = [];
+
   @override
   void initState() {
     super.initState();
     loadData();
   }
 
-  void loadData() {}
+  Future<void> loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var result = await SqliteServices.getReminderList();
+    print(result.length);
+    setState(() {
+      _reminderList.addAll(result);
+      _isLoading = false;
+    });
+  }
+
+  Future<void> saveReminder(Reminder reminder) async {
+    await SqliteServices.saveReminder(reminder);
+  }
+
+  Future<void> updateReminder(Reminder reminder, int index) async {
+    await SqliteServices.updateReminder(reminder, index);
+  }
 
   List<Reminder> arrData = [
-    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
-    Reminder(DateTime.now(), TimeOfDay.now(), "Mark heart rate!"),
+    Reminder(
+        date: DateTime.now(), time: TimeOfDay.now(), note: "Mark heart rate!"),
+    Reminder(
+        date: DateTime.now(), time: TimeOfDay.now(), note: "Mark heart rate!"),
+    Reminder(
+        date: DateTime.now(), time: TimeOfDay.now(), note: "Mark heart rate!"),
+    Reminder(
+        date: DateTime.now(), time: TimeOfDay.now(), note: "Mark heart rate!"),
   ];
 
   ListView _buildWidgetList() {
     Size screenSize = MediaQuery.of(context).size;
     return ListView.builder(
         padding: const EdgeInsets.all(40),
-        itemCount: arrData.length,
+        itemCount: _reminderList.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                        '${DateFormat('yMd').format(arrData[index].date).toString()}-'
-                        '${arrData[index].time.format(context)}',
-                        style: TextStyle(fontSize: 20)),
-                    IconButton(
-                        icon: const Icon(AppIcons.edit, color: Colors.black),
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/reminder_detail",
-                                  arguments: arrData[index])
-                              .then((value) {
-                            if (value != null) {
-                              setState(() {
-                                arrData[index] = value;
-                              });
-                            }
-                          });
-                        }),
-                    IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () {
-                          setState(() {
-                            arrData.removeAt(index);
-                          });
-                        }),
+                    Expanded(
+                        child: Row(
+                      children: [
+                        Text(
+                            '${DateFormat('yMd').format(_reminderList[index].date)} '
+                            '- ${formatTimeOfDay(_reminderList[index].time)}',
+                            style: TextStyle(fontSize: 15)),
+                      ],
+                    )),
+                    Expanded(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: const Icon(AppIcons.edit,
+                                  color: Colors.black),
+                              onPressed: () {
+                                Navigator.pushNamed(context, "/reminder_detail",
+                                        arguments: _reminderList[index])
+                                    .then((value) {
+                                  if (value != null) {
+                                    updateReminder(
+                                        value, _reminderList[index].id);
+                                    setState(() {
+                                      _reminderList[index] = value;
+                                    });
+                                  }
+                                });
+                              },
+                              padding: EdgeInsets.only(top: 25),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              onPressed: () {
+                                setState(() {
+                                  _reminderList.removeAt(index);
+                                });
+                              },
+                              padding: EdgeInsets.only(top: 25),
+                            ),
+                          ],
+                        ))
                   ],
                 ),
                 Text(
-                  arrData[index].note,
+                  _reminderList[index].note,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: 15,
                   ),
                 ),
                 SizedBox(
@@ -97,7 +135,11 @@ class _ReminderListState extends State<ReminderList> {
         title: Text('Reminder List'),
       ),
       body: Container(
-        child: _buildWidgetList(),
+        child: _isLoading
+            ? Center(
+                child: Text('empty'),
+              )
+            : _buildWidgetList(),
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: Icon(
@@ -115,12 +157,14 @@ class _ReminderListState extends State<ReminderList> {
           Navigator.pushNamed(
             context,
             "/reminder_detail",
-            arguments: Reminder(DateTime.now(), TimeOfDay.now(), ''),
+            arguments:
+                Reminder(date: DateTime.now(), time: TimeOfDay.now(), note: ''),
           ).then((value) {
             if (value != null) {
               setState(() {
-                arrData.add(value);
+                _reminderList.add(value);
               });
+              saveReminder(value);
             }
           })
         },

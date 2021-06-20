@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:heart_rate_monitor/models/reminder/reminder.dart';
 import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/local_widgets/edit_dialog/edit_dialog.dart';
-import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_list.dart';
+import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_service/reminder_service.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
@@ -47,9 +48,11 @@ class _ReminderDetail extends State<ReminderDetail> {
       initialTime: _time,
     );
 
-    setState(() {
-      _reminder.time = picked;
-    });
+    if (picked != null) {
+      setState(() {
+        _reminder.time = picked;
+      });
+    }
   }
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
@@ -77,11 +80,6 @@ class _ReminderDetail extends State<ReminderDetail> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     _reminder = ModalRoute.of(context).settings.arguments;
-    // if (_reminder == null) {
-    //   setState(() {
-    //     _reminder = new Reminder(DateTime.now(), TimeOfDay.now(), '');
-    //   });
-    // }
     return Scaffold(
       appBar: AppBar(
         title: Text('Reminder'),
@@ -107,7 +105,7 @@ class _ReminderDetail extends State<ReminderDetail> {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    '${DateFormat('yMd').format(_reminder.date)} - ${_reminder.time.format(context)}',
+                    '${DateFormat('yMd').format(_reminder.date)} - ${formatTimeOfDay(_reminder.time)}',
                   ),
                 ),
                 IconButton(
@@ -116,7 +114,7 @@ class _ReminderDetail extends State<ReminderDetail> {
                     color: Color(0xFF84E0D4),
                   ),
                   onPressed: callDatePicker,
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(top: 20),
                 ),
                 IconButton(
                   icon: Icon(
@@ -126,7 +124,7 @@ class _ReminderDetail extends State<ReminderDetail> {
                   onPressed: () {
                     selectedTime(context);
                   },
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(top: 20),
                 ),
               ],
             ),
@@ -156,7 +154,7 @@ class _ReminderDetail extends State<ReminderDetail> {
                 IconButton(
                   icon: const Icon(AppIcons.edit, color: Colors.black),
                   onPressed: handleEditNote,
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 20),
                 ),
               ],
             ),
