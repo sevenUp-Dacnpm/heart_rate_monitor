@@ -2,6 +2,8 @@
     package="com.swordfish.heart_rate_monitor">
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
    <application
         android:label="heart_rate_monitor"
         android:icon="@mipmap/ic_launcher">

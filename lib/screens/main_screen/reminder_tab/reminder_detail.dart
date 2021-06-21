@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:heart_rate_monitor/models/reminder/reminder.dart';
 import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/local_widgets/edit_dialog/edit_dialog.dart';
+import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_service/reminder_local_notification.dart';
 import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_service/reminder_service.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'dart:async';
@@ -18,6 +20,16 @@ class _ReminderDetail extends State<ReminderDetail> {
   Reminder _reminder;
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay picked;
+  FlutterLocalNotificationsPlugin localNotification;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      localNotification = initializeNotification();
+    });
+  }
 
   void callDatePicker() async {
     var result = await getDate();
@@ -179,6 +191,11 @@ class _ReminderDetail extends State<ReminderDetail> {
                       )),
                   ElevatedButton(
                       onPressed: () {
+                        showNotification(
+                            localNotification,
+                            createDateFromDateTimeAndTimeOfDay(
+                                _reminder.date, _reminder.time),
+                            _reminder.note);
                         Navigator.pop(context, _reminder);
                       },
                       child: Text(
