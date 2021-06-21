@@ -23,9 +23,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   int _bpm = 0; // beats per minute
   int _fs = 30; // sampling frequency (fps)
   int _windowLen = 30 * 6; // window length to display - 6 seconds
-  double _alpha = 1; // factor for the mean value
+  double _alpha = 0.3; // factor for the mean value
   Timer _timer;
-  double duration = 1000;
+  double duration = 22000;
   AnimationController _animationController;
   int _measureDurationMilliseconds = 0; //ms
   double _iconScale = 1;
