@@ -27,8 +27,15 @@ class _ReminderDetail extends State<ReminderDetail> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      localNotification = initializeNotification();
+      localNotification = initializeNotification(selectNotification);
     });
+  }
+
+  Future selectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    }
+    await Navigator.pushNamed(context, '/');
   }
 
   void callDatePicker() async {
