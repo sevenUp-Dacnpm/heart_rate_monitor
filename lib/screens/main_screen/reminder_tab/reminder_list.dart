@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:heart_rate_monitor/models/reminder/reminder.dart';
 import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_service/reminder_service.dart';
-import 'package:heart_rate_monitor/screens/main_screen/reminder_tab/reminder_service/reminder_local_notification.dart';
 import 'package:heart_rate_monitor/widgets/icons/app_icons/app_icons.dart';
 import 'package:heart_rate_monitor/services/sqlite_services/sqlite_services.dart';
 import 'package:intl/intl.dart';
@@ -16,15 +14,11 @@ class ReminderList extends StatefulWidget {
 class _ReminderListState extends State<ReminderList> {
   bool _isLoading = true;
   List<Reminder> _reminderList = [];
-  FlutterLocalNotificationsPlugin localNotification;
 
   @override
   void initState() {
     super.initState();
     loadData();
-    setState(() {
-      localNotification = initializeNotification();
-    });
   }
 
   Future<void> loadData() async {
@@ -130,13 +124,6 @@ class _ReminderListState extends State<ReminderList> {
                     fontSize: 15,
                   ),
                 ),
-                TextButton(
-                    onPressed: () {
-                      // showNotification(localNotification);
-                    },
-                    child: Text('notify')),
-                Text(
-                    '${durationTime(_reminderList[index].date, _reminderList[index].time)}'),
                 SizedBox(
                   height: screenSize.height * 0.01,
                 ),
