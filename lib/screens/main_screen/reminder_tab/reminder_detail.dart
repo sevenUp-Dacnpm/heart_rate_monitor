@@ -102,6 +102,8 @@ class _ReminderDetail extends State<ReminderDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Reminder'),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
           child: Container(

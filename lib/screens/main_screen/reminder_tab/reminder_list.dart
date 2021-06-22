@@ -138,11 +138,13 @@ class _ReminderListState extends State<ReminderList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Reminder List'),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: Container(
         child: _isLoading
             ? Center(
-                child: Text('empty'),
+                child: CircularProgressIndicator(),
               )
             : _buildWidgetList(),
       ),

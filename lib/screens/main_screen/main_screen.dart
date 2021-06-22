@@ -23,6 +23,8 @@ class _MainScreenState extends State<MainScreen> {
     SettingTab(),
   ];
 
+  List<String> tabTitles = ["Statistic", "History", "Measure", "Reminder", "Setting"];
+
   void onNavigatorTab(index) {
     setState(() {
       _currentIndex = index;
@@ -32,11 +34,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('$_currentTabTitle'),
-      //   centerTitle: true,
-      //   elevation: 0,
-      // ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: onNavigatorTab,
         showUnselectedLabels: true,
