@@ -63,8 +63,8 @@ class AuthenticationServices {
     prefs.setString("fullName", data.user.profile.fullName);
     prefs.setString("gender", data.user.profile.gender);
     prefs.setString("dob", data.user.profile.dob?.toIso8601String());
-    prefs.setInt("weight", data.user.profile.weight);
-    prefs.setInt("height", data.user.profile.height);
+    prefs.setDouble("weight", data.user.profile.weight);
+    prefs.setDouble("height", data.user.profile.height);
   }
 
   static Future<void> removeAccessData() async {

@@ -42,8 +42,8 @@ class Profile {
   DateTime dob;
   String fullName;
   String gender;
-  int weight;
-  int height;
+  double weight;
+  double height;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
         dob: DateTime.parse(json["dob"]),

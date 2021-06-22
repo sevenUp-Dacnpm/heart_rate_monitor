@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:heart_rate_monitor/models/access_data/access_data.dart';
+import 'package:heart_rate_monitor/services/api_services/update_account_services/update_account_services.dart';
 import 'package:heart_rate_monitor/utils/validator/validator.dart';
+import 'package:heart_rate_monitor/widgets/icons/notify_dialog/notify_dialog.dart';
+import 'package:heart_rate_monitor/models/user/user.dart';
 
 class Account extends StatefulWidget {
   @override
@@ -10,26 +14,73 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   var _formKey = GlobalKey<FormState>();
   var _fullNameTextEditingController = TextEditingController();
-  var _currentSelectedValue = 'Male';
+  var _currentSelectedGender;
   var _dobTextEditingController = TextEditingController();
   var _weightTextEditingController = TextEditingController();
   var _heightTextEditingController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    _fullNameTextEditingController.text =
+        AccessData().user.profile.fullName.toString();
+    _currentSelectedGender = AccessData().user.profile.gender.toString();
+    _dobTextEditingController.text = AccessData().user.profile.dob.toString();
+    _weightTextEditingController.text =
+        AccessData().user.profile.weight.toString();
+    _heightTextEditingController.text =
+        AccessData().user.profile.height.toString();
+  }
+
+  DateTime pickedDate;
   Future _selectDate() async {
-    DateTime picked = await showDatePicker(
+    pickedDate = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
       firstDate: new DateTime(1900),
       lastDate: new DateTime.now(),
     );
-    if (picked != null)
-      setState(() => _dobTextEditingController.text = picked.toString());
+    if (pickedDate != null)
+      setState(() => _dobTextEditingController.text = pickedDate.toString());
   }
 
-  var genderTypes = ["Male", "Female", "Other"];
+  var genderTypes = ["male", "female", "other"];
 
+  bool _isUpdating = false;
   Future<void> saveForm() async {
     if (!_formKey.currentState.validate()) return;
+    setState(() {
+      _isUpdating = true;
+    });
+
+    User updateInfo = User(
+        id: AccessData().user.id,
+        profile: Profile(
+            dob: pickedDate,
+            fullName: _fullNameTextEditingController.text,
+            gender: _currentSelectedGender,
+            weight: double.parse(_weightTextEditingController.text),
+            height: double.parse(_heightTextEditingController.text)));
+
+    bool result = await AccountServices.updateAccount(updateInfo);
+
+    if (result != null) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, "/");
+      showDialog(
+          context: context,
+          builder: (context) =>
+              NotifyDialog("Success", "Update successfully", "OK"));
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              NotifyDialog("Failed", "Can not update in time", "Try again"));
+    }
+
+    setState(() {
+      _isUpdating = false;
+    });
   }
 
   @override
@@ -84,14 +135,14 @@ class _AccountState extends State<Account> {
                               vertical: 10, horizontal: 10),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0))),
-                      isEmpty: _currentSelectedValue == '',
+                      isEmpty: _currentSelectedGender == '',
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                          value: _currentSelectedValue,
+                          value: _currentSelectedGender,
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              _currentSelectedValue = newValue;
+                              _currentSelectedGender = newValue;
                               state.didChange(newValue);
                             });
                           },
@@ -172,6 +223,8 @@ class _AccountState extends State<Account> {
                 SizedBox(
                   height: screenSize.height * 0.1,
                 ),
+                if (_isUpdating) Center(child: CircularProgressIndicator()),
+                if (_isUpdating) SizedBox(height: 10),
                 Container(
                     width: double.infinity,
                     child: ElevatedButton(
