@@ -49,15 +49,15 @@ class Profile {
         dob: DateTime.parse(json["dob"]),
         fullName: json["fullName"],
         gender: json["gender"],
-        weight: json["weight"],
-        height: json["height"],
+        weight: json["weight"].toDouble(),
+        height: json["height"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
         "dob": dob?.toIso8601String(),
         "fullName": fullName,
         "gender": gender,
-        "weight": weight,
-        "height": height,
+        "weight": weight.toDouble(),
+        "height": height.toDouble(),
       };
 }

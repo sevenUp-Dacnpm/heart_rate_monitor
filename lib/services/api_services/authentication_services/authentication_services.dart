@@ -83,8 +83,8 @@ class AuthenticationServices {
     var fullName = prefs.get("fullName");
     var gender = prefs.get("gender");
     var dob = prefs.get("dob");
-    var weight = prefs.get("weight");
-    var height = prefs.get("height");
+    var weight = prefs.getDouble("weight");
+    var height = prefs.getDouble("height");
     return AccessData.withData(
         token: token,
         user: User(
