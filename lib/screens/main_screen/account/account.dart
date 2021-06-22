@@ -23,11 +23,12 @@ class _AccountState extends State<Account> {
   @override
   void initState() {
     super.initState();
-    _fullNameTextEditingController.text = AccessData().user.profile.fullName.toString();
-    _currentSelectedGender = AccessData().user.profile.gender.toString();
-    _dobTextEditingController.text = DateFormat.yMd().format(AccessData().user.profile.dob);
-    _weightTextEditingController.text = AccessData().user.profile.weight.toString();
-    _heightTextEditingController.text = AccessData().user.profile.height.toString();
+    _fullNameTextEditingController.text = AccessData().user.profile.fullName?.toString() ?? "";
+    _currentSelectedGender = AccessData().user.profile.gender?.toString() ?? "other";
+    _dobTextEditingController.text =
+        AccessData().user.profile.dob == null ? "" : DateFormat.yMd().format(AccessData().user.profile.dob);
+    _weightTextEditingController.text = AccessData().user.profile.weight?.toString() ?? "";
+    _heightTextEditingController.text = AccessData().user.profile.height?.toString() ?? "";
   }
 
   DateTime pickedDate;
@@ -58,12 +59,13 @@ class _AccountState extends State<Account> {
             weight: double.parse(_weightTextEditingController.text),
             height: double.parse(_heightTextEditingController.text)));
 
-    bool result = await AccountServices.updateAccount(updateInfo);
+    var result = await AccountServices.updateAccount(updateInfo);
 
     if (result != null) {
       Navigator.pop(context);
       Navigator.pushNamed(context, "/");
       showDialog(context: context, builder: (context) => NotifyDialog("Success", "Update successfully", "OK"));
+      AccessData().user.profile = result;
     } else {
       showDialog(context: context, builder: (context) => NotifyDialog("Failed", "Can not update in time", "Try again"));
     }
@@ -124,20 +126,27 @@ class _AccountState extends State<Account> {
                       isEmpty: _currentSelectedGender == '',
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
-                          value: _currentSelectedGender,
+                          value: _currentSelectedGender ?? "other",
                           isDense: true,
                           onChanged: (String newValue) {
                             setState(() {
-                              _currentSelectedGender = newValue;
-                              state.didChange(newValue);
+                              _currentSelectedGender = newValue ?? "other";
                             });
                           },
-                          items: genderTypes.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
+                          items: [
+                            DropdownMenuItem<String>(
+                              value: "male",
+                              child: Text("Male"),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: "female",
+                              child: Text("Female"),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: "other",
+                              child: Text("Other"),
+                            ),
+                          ],
                         ),
                       ),
                     );

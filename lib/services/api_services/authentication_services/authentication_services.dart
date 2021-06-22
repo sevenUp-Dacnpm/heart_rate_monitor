@@ -60,11 +60,11 @@ class AuthenticationServices {
   static Future<void> saveAccessData(AccessData data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", data.token);
-    prefs.setString("fullName", data.user.profile.fullName);
-    prefs.setString("gender", data.user.profile.gender);
-    prefs.setString("dob", data.user.profile.dob?.toIso8601String());
-    prefs.setDouble("weight", data.user.profile.weight);
-    prefs.setDouble("height", data.user.profile.height);
+    prefs.setString("fullName", data.user.profile.fullName ?? "");
+    prefs.setString("gender", data.user.profile.gender ?? "");
+    prefs.setString("dob", data.user.profile.dob?.toIso8601String() ?? "");
+    prefs.setDouble("weight", data.user.profile.weight ?? 0);
+    prefs.setDouble("height", data.user.profile.height ?? 0);
   }
 
   static Future<void> removeAccessData() async {

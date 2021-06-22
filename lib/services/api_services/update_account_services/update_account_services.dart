@@ -8,7 +8,7 @@ import 'package:http/http.dart';
 import '../api_services.dart';
 
 class AccountServices {
-  static Future<bool> updateAccount(User user) async {
+  static Future<Profile> updateAccount(User user) async {
     Uri url = Uri.https(APIServices.apiUrl, "users/profile");
     print("${AccessData().token}");
     var response = await put(url,
@@ -19,8 +19,13 @@ class AccountServices {
         body: jsonEncode(user.profile.toJson()));
     print(response.body);
     if (APIServices.handle401Unauthorized(response)) {
-      return false;
+      return null;
     }
-    return response.statusCode == 201;
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      return Profile.fromJson(json["profile"]);
+    } else {
+      return null;
+    }
   }
 }

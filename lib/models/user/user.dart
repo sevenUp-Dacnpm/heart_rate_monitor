@@ -46,11 +46,11 @@ class Profile {
   double height;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        dob: DateTime.parse(json["dob"]),
+        dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
         fullName: json["fullName"],
         gender: json["gender"],
-        weight: json["weight"].toDouble(),
-        height: json["height"].toDouble(),
+        weight: json["weight"]?.toDouble(),
+        height: json["height"]?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
