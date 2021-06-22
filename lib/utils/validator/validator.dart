@@ -18,6 +18,6 @@ class Validator {
   static String validateHeight(String height) {
     return double.tryParse(height) != null
         ? null
-        : "The weight must be a number";
+        : "The height must be a number";
   }
 }
