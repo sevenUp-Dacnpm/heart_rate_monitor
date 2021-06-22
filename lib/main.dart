@@ -5,6 +5,7 @@ import 'package:heart_rate_monitor/models/access_data/access_data.dart';
 import 'package:heart_rate_monitor/screens/authentication/login_screen/login_screen.dart';
 import 'package:heart_rate_monitor/screens/authentication/register_screen/register_screen.dart';
 import 'package:heart_rate_monitor/screens/keys/keys.dart';
+import 'package:heart_rate_monitor/screens/main_screen/account/account.dart';
 import 'package:heart_rate_monitor/screens/main_screen/main_screen.dart';
 import 'package:heart_rate_monitor/services/api_services/authentication_services/authentication_services.dart';
 import 'package:heart_rate_monitor/services/sqlite_services/sqlite_services.dart';
@@ -76,7 +77,8 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
         "/": (context) => MainScreen(),
         "/login": (context) => LoginScreen(),
         "/register": (context) => RegisterScreen(),
-        "/reminder_detail": (context) => ReminderDetail()
+        "/reminder_detail": (context) => ReminderDetail(),
+        "/account": (context) => Account()
       },
     );
   }

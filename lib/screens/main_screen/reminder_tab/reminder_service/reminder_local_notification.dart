@@ -27,7 +27,7 @@ Future showNotification(FlutterLocalNotificationsPlugin localNotification,
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
-  await localNotification.zonedSchedule(0, "Heart Rate Reminder", note,
+  await localNotification.zonedSchedule(1, "Heart Rate Reminder", note,
       tz.TZDateTime.from(dateTime, tz.local), generalNotificationDetails,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
