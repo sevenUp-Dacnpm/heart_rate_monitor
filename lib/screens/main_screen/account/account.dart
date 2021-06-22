@@ -54,7 +54,6 @@ class _AccountState extends State<Account> {
     });
 
     User updateInfo = User(
-        id: AccessData().user.id,
         profile: Profile(
             dob: pickedDate,
             fullName: _fullNameTextEditingController.text,

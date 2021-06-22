@@ -16,7 +16,7 @@ class AccountServices {
           HttpHeaders.authorizationHeader: "${AccessData().token}",
           HttpHeaders.contentTypeHeader: ContentType.json.value,
         },
-        body: jsonEncode(user.toJson()));
+        body: jsonEncode(user.profile.toJson()));
     print(response.body);
     if (APIServices.handle401Unauthorized(response)) {
       return false;
