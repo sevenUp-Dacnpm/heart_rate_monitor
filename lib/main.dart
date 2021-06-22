@@ -70,8 +70,7 @@ class _HeartRateMonitorState extends State<HeartRateMonitor> {
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Color(0xFF2CC6AE)),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20))))),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))))),
       ),
       routes: {
         "/": (context) => MainScreen(),

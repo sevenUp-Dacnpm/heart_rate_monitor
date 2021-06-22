@@ -15,7 +15,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 2;
-  String _currentTabTitle = 'Measure';
   List<Widget> tabs = [
     StatisticTab(),
     HistoryTab(),
@@ -24,18 +23,11 @@ class _MainScreenState extends State<MainScreen> {
     SettingTab(),
   ];
 
-  List<String> tabTitles = [
-    "Statistic",
-    "History",
-    "Measure",
-    "Reminder",
-    "Setting"
-  ];
+  List<String> tabTitles = ["Statistic", "History", "Measure", "Reminder", "Setting"];
 
   void onNavigatorTab(index) {
     setState(() {
       _currentIndex = index;
-      _currentTabTitle = tabTitles[index];
     });
   }
 

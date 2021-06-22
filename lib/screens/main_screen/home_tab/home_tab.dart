@@ -20,7 +20,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 
   bool _toggled = false; // toggle button value
   List<SensorValue> _data = []; // array to store the values
-  int _bpm = 0; // beats per minute
+  int _bpm = 80; // beats per minute
   int _fs = 30; // sampling frequency (fps)
   int _windowLen = 30 * 6; // window length to display - 6 seconds
   double _alpha = 0.3; // factor for the mean value
@@ -75,7 +75,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       _animationController.repeat(reverse: true);
       setState(() {
         _toggled = true;
-        _bpm = 0;
+        _bpm = 80;
       });
       // after is toggled
       _initTimer();
@@ -234,7 +234,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               ),
             ),
             Text(
-              "$_bpm BPM",
+              "${!_toggled ? 0 : _bpm} BPM",
               style: Theme.of(context).textTheme.headline3,
             ),
             Divider(
