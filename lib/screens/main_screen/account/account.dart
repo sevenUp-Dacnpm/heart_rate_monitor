@@ -5,6 +5,7 @@ import 'package:heart_rate_monitor/services/api_services/update_account_services
 import 'package:heart_rate_monitor/utils/validator/validator.dart';
 import 'package:heart_rate_monitor/widgets/icons/notify_dialog/notify_dialog.dart';
 import 'package:heart_rate_monitor/models/user/user.dart';
+import 'package:intl/intl.dart';
 
 class Account extends StatefulWidget {
   @override
@@ -22,14 +23,11 @@ class _AccountState extends State<Account> {
   @override
   void initState() {
     super.initState();
-    _fullNameTextEditingController.text =
-        AccessData().user.profile.fullName.toString();
+    _fullNameTextEditingController.text = AccessData().user.profile.fullName.toString();
     _currentSelectedGender = AccessData().user.profile.gender.toString();
-    _dobTextEditingController.text = AccessData().user.profile.dob.toString();
-    _weightTextEditingController.text =
-        AccessData().user.profile.weight.toString();
-    _heightTextEditingController.text =
-        AccessData().user.profile.height.toString();
+    _dobTextEditingController.text = DateFormat.yMd().format(AccessData().user.profile.dob);
+    _weightTextEditingController.text = AccessData().user.profile.weight.toString();
+    _heightTextEditingController.text = AccessData().user.profile.height.toString();
   }
 
   DateTime pickedDate;
@@ -40,8 +38,7 @@ class _AccountState extends State<Account> {
       firstDate: new DateTime(1900),
       lastDate: new DateTime.now(),
     );
-    if (pickedDate != null)
-      setState(() => _dobTextEditingController.text = pickedDate.toString());
+    if (pickedDate != null) setState(() => _dobTextEditingController.text = DateFormat.yMd().format(pickedDate));
   }
 
   var genderTypes = ["male", "female", "other"];
@@ -66,15 +63,9 @@ class _AccountState extends State<Account> {
     if (result != null) {
       Navigator.pop(context);
       Navigator.pushNamed(context, "/");
-      showDialog(
-          context: context,
-          builder: (context) =>
-              NotifyDialog("Success", "Update successfully", "OK"));
+      showDialog(context: context, builder: (context) => NotifyDialog("Success", "Update successfully", "OK"));
     } else {
-      showDialog(
-          context: context,
-          builder: (context) =>
-              NotifyDialog("Failed", "Can not update in time", "Try again"));
+      showDialog(context: context, builder: (context) => NotifyDialog("Failed", "Can not update in time", "Try again"));
     }
 
     setState(() {
@@ -106,8 +97,7 @@ class _AccountState extends State<Account> {
                 TextFormField(
                   controller: _fullNameTextEditingController,
                   decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -127,13 +117,10 @@ class _AccountState extends State<Account> {
                     return InputDecorator(
                       decoration: InputDecoration(
                           // labelStyle: textStyle,
-                          errorStyle: TextStyle(
-                              color: Colors.redAccent, fontSize: 16.0),
+                          errorStyle: TextStyle(color: Colors.redAccent, fontSize: 16.0),
                           hintText: 'Please select expense',
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0))),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0))),
                       isEmpty: _currentSelectedGender == '',
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
@@ -166,8 +153,7 @@ class _AccountState extends State<Account> {
                 TextFormField(
                   controller: _dobTextEditingController,
                   decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -191,8 +177,7 @@ class _AccountState extends State<Account> {
                 TextFormField(
                   controller: _weightTextEditingController,
                   decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -210,8 +195,7 @@ class _AccountState extends State<Account> {
                 TextFormField(
                   controller: _heightTextEditingController,
                   decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
